@@ -3,6 +3,9 @@ import java.net.*;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -33,22 +36,15 @@ public class FXMLController implements Initializable {
     }
 
     public void startStream(){
-        String temp = "";
-        int i = 0;
-        while (i < 10) {
-            FileOutputStream imageOutFile = null;
-            try {
-                imageOutFile = new FileOutputStream("image" + i + ".jpeg", true);
-            } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                continue;
-            }
+        Runnable frameExtracter = () -> {
+            String temp = "";
+            ByteArrayOutputStream imageByteStream = new ByteArrayOutputStream();
             while(true) {
                 try {
                     socket.receive(receivedPacket);
                     if (new String(receivedPacket.getData()).contains("start")) break;
                 } catch (IOException e) {
-                    e.printStackTrace();
+//                    e.printStackTrace();
                 }
             }
             while(true){
@@ -56,21 +52,16 @@ public class FXMLController implements Initializable {
                     socket.receive(receivedPacket);
                     temp = new String(receivedPacket.getData());
                     if (temp.contains("finished")) break;
-                    imageOutFile.write(Base64.getDecoder().decode(temp));
+                    imageByteStream.write(Base64.getDecoder().decode(temp));
                 } catch (IOException | RuntimeException e) {
-                    System.out.println(temp);
-                    e.printStackTrace();
+//                    e.printStackTrace();
                     break;
                 }
             }
-            try {
-                imageOutFile.close();
-//                piFrame.setImage(new Image("file:image.jpg"));
-//                new File("image.jpg").delete();
-            } catch (IOException | RuntimeException e) {
-                    e.printStackTrace();
-            }
-            i++;
-        }
+            Image image = new Image(new ByteArrayInputStream(imageByteStream.toByteArray()));
+            piFrame.setImage(image);
+        };
+        ScheduledExecutorService timer = Executors.newSingleThreadScheduledExecutor();
+        timer.scheduleAtFixedRate(frameExtracter, 0, 33, TimeUnit.MILLISECONDS);
     }
 }
