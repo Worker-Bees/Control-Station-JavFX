@@ -33,12 +33,12 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button id="start" fx:id="startButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="150.0" text="Start" textAlignment="JUSTIFY" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
+                  <Button id="start" fx:id="startButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="150.0" text="Start (Enter)" textAlignment="JUSTIFY" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
                      <GridPane.margin>
                         <Insets right="20.0" />
                      </GridPane.margin>
                   </Button>
-                  <Button fx:id="stopButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="150.0" text="Stop" textAlignment="JUSTIFY" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.valignment="CENTER">
+                  <Button fx:id="stopButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="150.0" text="Stop (Backspace)" textAlignment="JUSTIFY" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.valignment="CENTER">
                      <GridPane.margin>
                         <Insets left="20.0" />
                      </GridPane.margin>
@@ -93,18 +93,18 @@
                             <RowConstraints maxHeight="75.4862060546875" minHeight="10.0" prefHeight="75.4862060546875" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Button fx:id="forwardButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="Forward" textAlignment="JUSTIFY" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                              <Button fx:id="forwardButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="Forward (W)" textAlignment="JUSTIFY" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                                  <GridPane.margin>
                                     <Insets />
                                  </GridPane.margin>
                               </Button>
-                              <Button fx:id="backButton" alignment="CENTER" contentDisplay="CENTER" minWidth="40.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="Back" textAlignment="JUSTIFY" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-                              <Button fx:id="rightButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="Right" textAlignment="JUSTIFY" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                              <Button fx:id="backButton" alignment="CENTER" contentDisplay="CENTER" minWidth="40.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="Back (S)" textAlignment="JUSTIFY" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                              <Button fx:id="rightButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="Right (D)" textAlignment="JUSTIFY" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                                  <GridPane.margin>
                                     <Insets />
                                  </GridPane.margin>
                               </Button>
-                              <Button fx:id="leftButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="Left" textAlignment="JUSTIFY" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                              <Button fx:id="leftButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="Left (A)" textAlignment="JUSTIFY" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                                  <GridPane.margin>
                                     <Insets />
                                  </GridPane.margin>
@@ -113,12 +113,12 @@
                         </GridPane>
                         <HBox minHeight="60.0" prefHeight="60.0" prefWidth="430.0">
                            <children>
-                              <Button fx:id="liftButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="100.0" text="Lift">
+                              <Button fx:id="liftButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="100.0" text="Lift (J)">
                                  <HBox.margin>
                                     <Insets left="100.0" />
                                  </HBox.margin>
                               </Button>
-                              <Button fx:id="dropButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="100.0" text="Drop">
+                              <Button fx:id="dropButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="100.0" text="Drop (K)">
                                  <HBox.margin>
                                     <Insets left="30.0" />
                                  </HBox.margin>
