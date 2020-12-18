@@ -9,53 +9,22 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#onKeyPressed" onKeyReleased="#onKeyReleased" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FXMLController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#onKeyPressed" onKeyReleased="#onKeyReleased" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FXMLController">
    <bottom>
 <!--      <Button id="start" fx:id="startButton" mnemonicParsing="false" onAction="#startStream" text="Start" BorderPane.alignment="CENTER" />-->
    </bottom>
    <center>
-      <ImageView id="piFrame" fx:id="piFrame" fitHeight="700.0" fitWidth="700.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
-         <BorderPane.margin>
-            <Insets />
-         </BorderPane.margin>
-         <viewport>
-            <Rectangle2D />
-         </viewport></ImageView>
-   </center>
-   <left>
-      <VBox BorderPane.alignment="CENTER">
+      <VBox>
          <children>
-            <GridPane maxHeight="300.0" VBox.vgrow="ALWAYS">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <Button fx:id="forwardButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text="Forward" textAlignment="JUSTIFY" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-                     <GridPane.margin>
-                        <Insets />
-                     </GridPane.margin></Button>
-                  <Button fx:id="backButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text="Back" textAlignment="JUSTIFY" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-                  <Button fx:id="rightButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text="Right" textAlignment="JUSTIFY" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-                     <GridPane.margin>
-                        <Insets />
-                     </GridPane.margin></Button>
-                  <Button fx:id="leftButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text="Left" textAlignment="JUSTIFY" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-                     <GridPane.margin>
-                        <Insets />
-                     </GridPane.margin></Button>
-               </children>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-            </GridPane>
-            <GridPane prefHeight="50.0">
+            <ImageView id="piFrame" fx:id="piFrame" fitHeight="631.0" fitWidth="842.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets left="20.0" />
+               </BorderPane.margin>
+               <viewport>
+                  <Rectangle2D />
+               </viewport>
+            </ImageView>
+            <GridPane prefHeight="100.0">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -64,116 +33,138 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button fx:id="liftButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text="Lift" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                  <Button fx:id="dropButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="100.0" text="Drop" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-               </children>
-               <VBox.margin>
-                  <Insets top="50.0" />
-               </VBox.margin>
-            </GridPane>
-            <Rectangle fx:id="highBar" arcHeight="5.0" arcWidth="5.0" height="50.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0">
-               <VBox.margin>
-                  <Insets left="100.0" right="100.0" top="50.0" />
-               </VBox.margin>
-            </Rectangle>
-            <Rectangle fx:id="mediumBar" arcHeight="5.0" arcWidth="5.0" height="50.0" layoutX="110.0" layoutY="460.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0">
-               <VBox.margin>
-                  <Insets left="100.0" right="100.0" />
-               </VBox.margin>
-            </Rectangle>
-            <Rectangle fx:id="lowBar" arcHeight="5.0" arcWidth="5.0" height="50.0" layoutX="10.0" layoutY="510.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0">
-               <VBox.margin>
-                  <Insets left="100.0" right="100.0" />
-               </VBox.margin>
-            </Rectangle>
-            <GridPane alignment="CENTER" prefHeight="50.0">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <VBox.margin>
-                  <Insets top="20.0" />
-               </VBox.margin>
-               <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Battery" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-                     <font>
-                        <Font size="30.0" />
-                     </font>
-                  </Text>
+                  <Button id="start" fx:id="startButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="150.0" text="Start (Enter)" textAlignment="JUSTIFY" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
+                     <GridPane.margin>
+                        <Insets right="20.0" />
+                     </GridPane.margin>
+                  </Button>
+                  <Button fx:id="stopButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="150.0" text="Stop (Backspace)" textAlignment="JUSTIFY" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.valignment="CENTER">
+                     <GridPane.margin>
+                        <Insets left="20.0" />
+                     </GridPane.margin>
+                  </Button>
                </children>
             </GridPane>
          </children>
          <BorderPane.margin>
-            <Insets left="10.0" />
+            <Insets right="10.0" />
          </BorderPane.margin>
       </VBox>
-   </left>
+   </center>
    <right>
-      <VBox prefWidth="300.0" BorderPane.alignment="CENTER">
+      <VBox prefWidth="700.0" BorderPane.alignment="CENTER">
          <children>
-            <ImageView fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" />
-            <GridPane prefHeight="100.0">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
+            <ImageView fitHeight="600.0" fitWidth="700.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@map.png" />
+               </image></ImageView>
+            <HBox prefHeight="320.0" prefWidth="700.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="5.0 m/s" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-                     <font>
-                        <Font size="50.0" />
-                     </font>
-                  </Text>
+                  <VBox prefHeight="232.0" prefWidth="430.0">
+                     <children>
+                        <GridPane prefHeight="102.0" prefWidth="430.0">
+                          <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="134.781494140625" minWidth="10.0" prefWidth="82.1044921875" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="236.6063232421875" minWidth="10.0" prefWidth="236.6063232421875" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="115.7322998046875" minWidth="10.0" prefWidth="89.3936767578125" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <Button fx:id="speedDownButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" text="-" textAlignment="JUSTIFY" GridPane.halignment="RIGHT" GridPane.valignment="CENTER" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="5.0 m/s" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                 <font>
+                                    <Font size="50.0" />
+                                 </font>
+                              </Text>
+                              <Button fx:id="speedUpButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" text="+" textAlignment="JUSTIFY" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.valignment="CENTER" />
+                           </children>
+                        </GridPane>
+                        <GridPane maxHeight="201.0" prefHeight="161.0" prefWidth="430.0">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints maxHeight="0.0" minHeight="0.0" prefHeight="0.0" />
+                            <RowConstraints maxHeight="67.92315673828125" minHeight="10.0" prefHeight="53.5137939453125" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="75.4862060546875" minHeight="10.0" prefHeight="75.4862060546875" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <Button fx:id="forwardButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="Forward (W)" textAlignment="JUSTIFY" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                                 <GridPane.margin>
+                                    <Insets />
+                                 </GridPane.margin>
+                              </Button>
+                              <Button fx:id="backButton" alignment="CENTER" contentDisplay="CENTER" minWidth="40.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="Back (S)" textAlignment="JUSTIFY" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                              <Button fx:id="rightButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="Right (D)" textAlignment="JUSTIFY" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                                 <GridPane.margin>
+                                    <Insets />
+                                 </GridPane.margin>
+                              </Button>
+                              <Button fx:id="leftButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="Left (A)" textAlignment="JUSTIFY" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                                 <GridPane.margin>
+                                    <Insets />
+                                 </GridPane.margin>
+                              </Button>
+                           </children>
+                        </GridPane>
+                        <HBox minHeight="60.0" prefHeight="60.0" prefWidth="430.0">
+                           <children>
+                              <Button fx:id="liftButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="100.0" text="Lift (J)">
+                                 <HBox.margin>
+                                    <Insets left="100.0" />
+                                 </HBox.margin>
+                              </Button>
+                              <Button fx:id="dropButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="100.0" text="Drop (K)">
+                                 <HBox.margin>
+                                    <Insets left="30.0" />
+                                 </HBox.margin>
+                              </Button>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="232.0" prefWidth="263.0">
+                     <children>
+                        <Rectangle fx:id="highBar" arcHeight="5.0" arcWidth="5.0" height="50.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0">
+                           <VBox.margin>
+                              <Insets bottom="5.0" left="100.0" top="50.0" />
+                           </VBox.margin>
+                        </Rectangle>
+                        <Rectangle fx:id="mediumBar" arcHeight="5.0" arcWidth="5.0" height="50.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0">
+                           <VBox.margin>
+                              <Insets bottom="5.0" left="100.0" />
+                           </VBox.margin>
+                        </Rectangle>
+                        <Rectangle fx:id="lowBar" arcHeight="5.0" arcWidth="5.0" height="50.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0">
+                           <VBox.margin>
+                              <Insets left="100.0" />
+                           </VBox.margin>
+                        </Rectangle>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Battery" textAlignment="CENTER">
+                           <font>
+                              <Font size="30.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="100.0" top="20.0" />
+                           </VBox.margin>
+                        </Text>
+                     </children>
+                  </VBox>
                </children>
                <VBox.margin>
-                  <Insets top="50.0" />
+                  <Insets top="10.0" />
                </VBox.margin>
-            </GridPane>
-            <GridPane prefHeight="50.0">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <Button fx:id="speedDownButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" text="-" textAlignment="JUSTIFY" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                  <Button fx:id="speedUpButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" text="+" textAlignment="JUSTIFY" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-               </children>
-               <VBox.margin>
-                  <Insets top="20.0" />
-               </VBox.margin>
-            </GridPane>
+            </HBox>
          </children>
          <BorderPane.margin>
             <Insets right="10.0" />
          </BorderPane.margin></VBox>
    </right>
-   <bottom>
-      <GridPane prefHeight="100.0" BorderPane.alignment="CENTER">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <Button id="start" fx:id="startButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="150.0" text="Start" textAlignment="JUSTIFY" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
-               <GridPane.margin>
-                  <Insets right="20.0" />
-               </GridPane.margin>
-            </Button>
-            <Button fx:id="stopButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="150.0" text="Stop" textAlignment="JUSTIFY" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.valignment="CENTER">
-               <GridPane.margin>
-                  <Insets left="20.0" />
-               </GridPane.margin>
-            </Button>
-         </children>
-      </GridPane>
-   </bottom>
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
 </BorderPane>

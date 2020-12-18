@@ -10,6 +10,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -51,6 +56,15 @@ public class FXMLController implements Initializable {
     private Rectangle mediumBar;
     @FXML
     private Rectangle highBar;
+
+    //For detecting key combinations
+//    final BooleanProperty aPressed = new SimpleBooleanProperty(false);
+//    final BooleanProperty wPressed = new SimpleBooleanProperty(false);
+//    final BooleanBinding awPressed = aPressed.and(wPressed);
+    private Boolean aPressed = false;
+    private Boolean wPressed = false;
+    private Boolean sPressed = false;
+    private Boolean dPressed = false;
 
     DatagramSocket socket;
     DatagramPacket receivedPacket;
@@ -118,23 +132,22 @@ public class FXMLController implements Initializable {
 
     @FXML
     private void onKeyPressed(KeyEvent keyEvent) {
-        System.out.println(keyEvent.getCode().getName());
         switch (keyEvent.getCode().getName()) {
             case "A":
                 leftButton.setStyle("-fx-background-color: black; -fx-text-fill: white");
-                sendKey("A");
+                aPressed = true;
                 break;
             case "W":
                 forwardButton.setStyle("-fx-background-color: black; -fx-text-fill: white");
-                sendKey("W");
+                wPressed = true;
                 break;
             case "S":
                 backButton.setStyle("-fx-background-color: black; -fx-text-fill: white");
-                sendKey("S");
+                sPressed = true;
                 break;
             case "D":
                 rightButton.setStyle("-fx-background-color: black; -fx-text-fill: white");
-                sendKey("D");
+                dPressed = true;
                 break;
             case "J":
                 liftButton.setStyle("-fx-background-color: black; -fx-text-fill: white");
@@ -155,6 +168,25 @@ public class FXMLController implements Initializable {
             default:
                 //Do nothing
         }
+
+        //Check for key combinations
+        if (aPressed && wPressed) {
+            sendKey("aw");
+        } else if (dPressed && wPressed) {
+            sendKey("dw");
+        } else if (aPressed && sPressed) {
+            sendKey("as");
+        } else if (dPressed && sPressed) {
+            sendKey("ds");
+        } else if (aPressed) {
+            sendKey("a");
+        } else if (wPressed) {
+            sendKey("w");
+        } else if (dPressed) {
+            sendKey("d");
+        } else if (sPressed) {
+            sendKey("s");
+        }
     }
 
     @FXML
@@ -162,15 +194,19 @@ public class FXMLController implements Initializable {
         switch (keyEvent.getCode().getName()) {
             case "A":
                 leftButton.setStyle(null);
+                aPressed = false;
                 break;
             case "W":
                 forwardButton.setStyle(null);
+                wPressed = false;
                 break;
             case "S":
                 backButton.setStyle(null);
+                sPressed = false;
                 break;
             case "D":
                 rightButton.setStyle(null);
+                dPressed = false;
                 break;
             case "J":
                 liftButton.setStyle(null);
@@ -194,6 +230,25 @@ public class FXMLController implements Initializable {
                 break;
             default:
                 //Do nothing
+        }
+
+        //Check for key combinations
+        if (aPressed && wPressed) {
+            sendKey("aw");
+        } else if (dPressed && wPressed) {
+            sendKey("dw");
+        } else if (aPressed && sPressed) {
+            sendKey("as");
+        } else if (dPressed && sPressed) {
+            sendKey("ds");
+        } else if (aPressed) {
+            sendKey("a");
+        } else if (wPressed) {
+            sendKey("w");
+        } else if (dPressed) {
+            sendKey("d");
+        } else if (sPressed) {
+            sendKey("s");
         }
     }
 
