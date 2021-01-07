@@ -22,12 +22,19 @@ import javafx.scene.control.TableRow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 
 
 public class FXMLController implements Initializable {
 
+    @FXML
+    private StackPane streamView;
+    @FXML
+    private Pane streamDataView;
     @FXML
     private ImageView piFrame;
     @FXML
@@ -79,6 +86,11 @@ public class FXMLController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         startButton.setStyle("-fx-background-color: green; -fx-text-fill: white");
         stopButton.setStyle("-fx-background-color: red; -fx-text-fill: white");
+        Line line1 = new Line(340, 631, 380, 531);
+        Line line2 = new Line( 720, 631, 620, 531);
+        line1.getStyleClass().add("line");
+        line2.getStyleClass().add("line");
+        streamDataView.getChildren().addAll(line1, line2);
         showBattery("High");
 
         try {
