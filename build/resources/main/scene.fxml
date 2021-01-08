@@ -43,7 +43,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button id="start" fx:id="startButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="150.0" text="Start (Enter)" textAlignment="JUSTIFY" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
+                  <Button id="start" fx:id="startButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#startStream" prefHeight="50.0" prefWidth="150.0" text="Start (Enter)" textAlignment="JUSTIFY" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
                      <GridPane.margin>
                         <Insets right="20.0" />
                      </GridPane.margin>
@@ -83,7 +83,7 @@
                           </rowConstraints>
                            <children>
                               <Button fx:id="speedDownButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" text="-" textAlignment="JUSTIFY" GridPane.halignment="RIGHT" GridPane.valignment="CENTER" />
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="5.0 m/s" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                              <Text fx:id="velocityText" strokeType="OUTSIDE" strokeWidth="0.0" text="5.0 m/s" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                                  <font>
                                     <Font size="50.0" />
                                  </font>

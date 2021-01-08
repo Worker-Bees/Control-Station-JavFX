@@ -1,5 +1,6 @@
 import java.io.*;
 import java.net.*;
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collection;
@@ -27,6 +28,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 
 
 public class FXMLController implements Initializable {
@@ -58,6 +60,8 @@ public class FXMLController implements Initializable {
     @FXML
     private Button speedDownButton;
     @FXML
+    private Text velocityText;
+    @FXML
     private Rectangle lowBar;
     @FXML
     private Rectangle mediumBar;
@@ -74,8 +78,11 @@ public class FXMLController implements Initializable {
     private Boolean dPressed = false;
 
     DatagramSocket socket;
+    DatagramSocket socket_metadata;
+    DatagramPacket receivedMetadataPacket;
     DatagramPacket receivedPacket;
     byte[] receivedData;
+    byte[] receivedMetadata;
 
     //Related to sending key signals to Pi
     DatagramSocket socket2;
@@ -95,11 +102,14 @@ public class FXMLController implements Initializable {
 
         try {
             socket = new DatagramSocket(2711);
+            socket_metadata = new DatagramSocket(3333);
         } catch (SocketException e) {
             e.printStackTrace();
         }
         receivedData = new byte[1024];
         receivedPacket = new DatagramPacket(receivedData, receivedData.length);
+        receivedMetadata = new byte[20];
+        receivedMetadataPacket = new DatagramPacket(receivedMetadata, receivedMetadata.length);
 
         //Set up socket to send key press signal to Pi
         try {
@@ -110,7 +120,6 @@ public class FXMLController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     public void startStream(){
@@ -120,7 +129,7 @@ public class FXMLController implements Initializable {
             while(true) {
                 try {
                     socket.receive(receivedPacket);
-                    if (new String(receivedPacket.getData()).contains("start")) break;
+                    if (new String(receivedPacket.getData(), 0, receivedPacket.getLength()).contains("start")) break;
                 } catch (IOException e) {
 //                    e.printStackTrace();
                 }
@@ -128,7 +137,7 @@ public class FXMLController implements Initializable {
             while(true){
                 try {
                     socket.receive(receivedPacket);
-                    temp = new String(receivedPacket.getData());
+                    temp = new String(receivedPacket.getData(), 0, receivedPacket.getLength());
                     if (temp.contains("finished")) break;
                     imageByteStream.write(Base64.getDecoder().decode(temp));
                 } catch (IOException | RuntimeException e) {
@@ -141,8 +150,23 @@ public class FXMLController implements Initializable {
                 piFrame.setImage(image);
             }
         };
+
+        Runnable getMetadata = () -> {
+            String temp;
+            try {
+                socket_metadata.receive(receivedMetadataPacket);
+                temp = new String(receivedMetadataPacket.getData()) + "";
+                double velocity = Double.parseDouble(temp);
+                if (velocity < 1) velocity = 0;
+                velocityText.setText(new DecimalFormat("#00.00").format(velocity) + " cm/s");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        };
         ScheduledExecutorService timer = Executors.newSingleThreadScheduledExecutor();
-        timer.scheduleAtFixedRate(frameExtracter, 0, 33, TimeUnit.MILLISECONDS);
+        timer.scheduleAtFixedRate(frameExtracter, 0, 1, TimeUnit.MILLISECONDS);
+        ScheduledExecutorService timer1 = Executors.newSingleThreadScheduledExecutor();
+        timer1.scheduleAtFixedRate(getMetadata, 0, 1, TimeUnit.MICROSECONDS);
     }
 
     @FXML
@@ -174,11 +198,11 @@ public class FXMLController implements Initializable {
                 break;
             case "Equals":
                 speedUpButton.setStyle("-fx-background-color: black; -fx-text-fill: white");
-                sendKey("Equals");
+                sendKey("+");
                 break;
             case "Minus":
                 speedDownButton.setStyle("-fx-background-color: black; -fx-text-fill: white");
-                sendKey("Minus");
+                sendKey("-");
                 break;
             default:
                 //Do nothing
@@ -266,6 +290,12 @@ public class FXMLController implements Initializable {
             sendKey("s");
         } else {
             sendKey("x");
+            sendKey("x");
+            sendKey("x");
+            aPressed = false;
+            wPressed = false;
+            dPressed = false;
+            sPressed = false;
         }
     }
 
@@ -275,7 +305,6 @@ public class FXMLController implements Initializable {
             buf = key.getBytes();
             DatagramPacket dpSend = new DatagramPacket(buf, buf.length, ip, 2345);
             socket2.send(dpSend);
-            System.out.println("key signal sent");
         } catch (IOException e) {
             e.printStackTrace();
         }
