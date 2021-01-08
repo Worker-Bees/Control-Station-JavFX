@@ -104,7 +104,8 @@ public class FXMLController implements Initializable {
         //Set up socket to send key press signal to Pi
         try {
             socket2 = new DatagramSocket(1234);
-            ip = InetAddress.getByName("localhost");
+//            ip = InetAddress.getByName("localhost");
+            ip = InetAddress.getByName("192.168.137.254");
             buf = null;
         } catch (IOException e) {
             e.printStackTrace();
@@ -136,7 +137,9 @@ public class FXMLController implements Initializable {
                 }
             }
             Image image = new Image(new ByteArrayInputStream(imageByteStream.toByteArray()));
-            piFrame.setImage(image);
+            if (image.getProgress() == 1 && !image.isError()) {
+                piFrame.setImage(image);
+            }
         };
         ScheduledExecutorService timer = Executors.newSingleThreadScheduledExecutor();
         timer.scheduleAtFixedRate(frameExtracter, 0, 33, TimeUnit.MILLISECONDS);
@@ -261,6 +264,8 @@ public class FXMLController implements Initializable {
             sendKey("d");
         } else if (sPressed) {
             sendKey("s");
+        } else {
+            sendKey("q");
         }
     }
 
