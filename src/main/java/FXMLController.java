@@ -186,13 +186,13 @@ public class FXMLController implements Initializable {
 
         //Check for key combinations
         if (aPressed && wPressed) {
-            sendKey("aw");
+            sendKey("q");
         } else if (dPressed && wPressed) {
-            sendKey("dw");
+            sendKey("e");
         } else if (aPressed && sPressed) {
-            sendKey("as");
+            sendKey("z");
         } else if (dPressed && sPressed) {
-            sendKey("ds");
+            sendKey("c");
         } else if (aPressed) {
             sendKey("a");
         } else if (wPressed) {
@@ -249,13 +249,13 @@ public class FXMLController implements Initializable {
 
         //Check for key combinations
         if (aPressed && wPressed) {
-            sendKey("aw");
+            sendKey("q");
         } else if (dPressed && wPressed) {
-            sendKey("dw");
+            sendKey("e");
         } else if (aPressed && sPressed) {
-            sendKey("as");
+            sendKey("z");
         } else if (dPressed && sPressed) {
-            sendKey("ds");
+            sendKey("c");
         } else if (aPressed) {
             sendKey("a");
         } else if (wPressed) {
@@ -265,7 +265,7 @@ public class FXMLController implements Initializable {
         } else if (sPressed) {
             sendKey("s");
         } else {
-            sendKey("q");
+            sendKey("x");
         }
     }
 
