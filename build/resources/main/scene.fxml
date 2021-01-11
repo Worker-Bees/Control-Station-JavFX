@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.control.Button?>
@@ -17,7 +24,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#onKeyPressed" onKeyReleased="#onKeyReleased" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FXMLController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#onKeyPressed" onKeyReleased="#onKeyReleased" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FXMLController">
    <bottom>
 <!--      <Button id="start" fx:id="startButton" mnemonicParsing="false" onAction="#startStream" text="Start" BorderPane.alignment="CENTER" />-->
    </bottom>
@@ -64,10 +71,23 @@
    <right>
       <VBox prefWidth="700.0" BorderPane.alignment="CENTER">
          <children>
-            <ImageView fitHeight="600.0" fitWidth="700.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@map.png" />
-               </image></ImageView>
+            <StackPane fx:id="mapContainer" minHeight="600.0" minWidth="700.0" prefHeight="150.0" prefWidth="200.0">
+               <children>
+                  <ImageView fx:id="map" fitHeight="600.0" fitWidth="700.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@map.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="car" fitHeight="50.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@car.png" />
+                     </image>
+                     <StackPane.margin>
+                        <Insets />
+                     </StackPane.margin>
+                  </ImageView>
+               </children>
+            </StackPane>
             <HBox prefHeight="320.0" prefWidth="700.0">
                <children>
                   <VBox prefHeight="232.0" prefWidth="430.0">
