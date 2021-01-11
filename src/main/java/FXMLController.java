@@ -63,7 +63,7 @@ public class FXMLController implements Initializable {
     @FXML
     private Rectangle highBar;
     @FXML
-    private StackPane mapContainer;
+    private Pane mapContainer;
     @FXML
     private ImageView map;
     @FXML
@@ -104,10 +104,14 @@ public class FXMLController implements Initializable {
         showBattery("High");
 
         //Calculate bounding coordinates of the robot
-        minX = -map.getBoundsInParent().getWidth()/2 + car.getBoundsInParent().getWidth()/2;
-        maxX = -minX;
-        minY = -map.getBoundsInParent().getHeight()/2 + car.getBoundsInParent().getHeight()/2;
-        maxY = -minY;
+//        minX = -map.getBoundsInParent().getWidth()/2 + car.getBoundsInParent().getWidth()/2;
+//        maxX = -minX;
+//        minY = -map.getBoundsInParent().getHeight()/2 + car.getBoundsInParent().getHeight()/2;
+//        maxY = -minY;
+        minX = 0;
+        maxX = map.getBoundsInParent().getWidth() - car.getBoundsInParent().getWidth();
+        minY = 0;
+        maxY = map.getBoundsInParent().getHeight() - car.getBoundsInParent().getHeight();
         //Set robot to starting position
         currentX = minX;
         currentY = maxY;
@@ -335,21 +339,26 @@ public class FXMLController implements Initializable {
         translateTransition.setToY(newY);
         //Playing the animation
         translateTransition.play();
-        //Draw the path the robot has gone through
-        //drawPath(currentX, currentY, newX, newY);
-        //Update currentX and currentY
-        currentX = newX;
-        currentY = newY;
-        //Get the next coordinates
-        double nextX = minX + Math.random() * (maxX - minX);
-        double nextY = minY + Math.random() * (maxY - minY);
         //Update position
-        translateTransition.setOnFinished(actionEvent -> updatePosition(nextX, nextY));
+        translateTransition.setOnFinished(actionEvent -> {
+            //Draw the path the robot has gone through
+            drawPath(currentX , currentY , newX, newY);
+            //Update currentX and currentY
+            currentX = newX;
+            currentY = newY;
+            //Get the next coordinates
+            double nextX = minX + Math.random() * (maxX - minX);
+            double nextY = minY + Math.random() * (maxY - minY);
+            updatePosition(nextX, nextY);
+        });
     }
 
     //Draw the path the robot has gone through
     public void drawPath(double oldX, double oldY, double newX, double newY) {
-        Line line = new Line(oldX, oldY, newX, newY);
+        //Adjust the coordinates so the line is drawn from the center of the car
+        Line line = new Line(oldX + car.getBoundsInParent().getWidth()/2, oldY + car.getBoundsInParent().getHeight()/2, newX + car.getBoundsInParent().getWidth()/2, newY + car.getBoundsInParent().getHeight()/2);
+        line.setStrokeWidth(5);
+        line.setStroke(Color.BLUE);
         mapContainer.getChildren().add(line);
     }
 }

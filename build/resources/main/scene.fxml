@@ -71,7 +71,7 @@
    <right>
       <VBox prefWidth="700.0" BorderPane.alignment="CENTER">
          <children>
-            <StackPane fx:id="mapContainer" minHeight="600.0" minWidth="700.0" prefHeight="150.0" prefWidth="200.0">
+            <Pane fx:id="mapContainer" prefHeight="600.0" prefWidth="700.0">
                <children>
                   <ImageView fx:id="map" fitHeight="600.0" fitWidth="700.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -82,12 +82,9 @@
                      <image>
                         <Image url="@car.png" />
                      </image>
-                     <StackPane.margin>
-                        <Insets />
-                     </StackPane.margin>
                   </ImageView>
                </children>
-            </StackPane>
+            </Pane>
             <HBox prefHeight="320.0" prefWidth="700.0">
                <children>
                   <VBox prefHeight="232.0" prefWidth="430.0">
