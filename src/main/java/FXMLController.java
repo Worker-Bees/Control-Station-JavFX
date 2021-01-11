@@ -17,6 +17,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableRow;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
@@ -68,6 +70,10 @@ public class FXMLController implements Initializable {
     private ImageView map;
     @FXML
     private ImageView car;
+    @FXML
+    private ToggleButton auto;
+    @FXML
+    private ToggleButton manual;
 
     //For detecting key combinations
 //    final BooleanProperty aPressed = new SimpleBooleanProperty(false);
@@ -96,6 +102,7 @@ public class FXMLController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         startButton.setStyle("-fx-background-color: green; -fx-text-fill: white");
         stopButton.setStyle("-fx-background-color: red; -fx-text-fill: white");
+        auto.getStyleClass().add("selected-mode");
         Line line1 = new Line(340, 631, 380, 531);
         Line line2 = new Line( 720, 631, 620, 531);
         line1.getStyleClass().add("line");
@@ -104,10 +111,6 @@ public class FXMLController implements Initializable {
         showBattery("High");
 
         //Calculate bounding coordinates of the robot
-//        minX = -map.getBoundsInParent().getWidth()/2 + car.getBoundsInParent().getWidth()/2;
-//        maxX = -minX;
-//        minY = -map.getBoundsInParent().getHeight()/2 + car.getBoundsInParent().getHeight()/2;
-//        maxY = -minY;
         minX = 0;
         maxX = map.getBoundsInParent().getWidth() - car.getBoundsInParent().getWidth();
         minY = 0;
@@ -118,7 +121,6 @@ public class FXMLController implements Initializable {
         car.setTranslateX(currentX);
         car.setTranslateY(currentY);
         updatePosition(currentX, currentY);
-        //drawPath(-100, -100, 100, 300);
 
         try {
             socket = new DatagramSocket(2711);
@@ -360,5 +362,25 @@ public class FXMLController implements Initializable {
         line.setStrokeWidth(5);
         line.setStroke(Color.BLUE);
         mapContainer.getChildren().add(line);
+    }
+
+    @FXML
+    private void onAutoClicked() {
+        if (auto.isSelected()) {
+            auto.getStyleClass().add("selected-mode");
+            manual.getStyleClass().removeAll("selected-mode");
+        } else {
+            auto.getStyleClass().removeAll("selected-mode");
+        }
+    }
+
+    @FXML
+    private void onManualClicked() {
+        if (manual.isSelected()) {
+            manual.getStyleClass().add("selected-mode");
+            auto.getStyleClass().removeAll("selected-mode");
+        } else {
+            manual.getStyleClass().removeAll("selected-mode");
+        }
     }
 }
