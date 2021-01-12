@@ -5,12 +5,14 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collection;
 import java.util.ResourceBundle;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javafx.animation.TranslateTransition;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -20,6 +22,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableRow;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
@@ -29,6 +33,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 
 public class FXMLController implements Initializable {
@@ -67,6 +72,16 @@ public class FXMLController implements Initializable {
     private Rectangle mediumBar;
     @FXML
     private Rectangle highBar;
+    @FXML
+    private Pane mapContainer;
+    @FXML
+    private ImageView map;
+    @FXML
+    private ImageView car;
+    @FXML
+    private ToggleButton auto;
+    @FXML
+    private ToggleButton manual;
 
     //For detecting key combinations
 //    final BooleanProperty aPressed = new SimpleBooleanProperty(false);
@@ -89,16 +104,34 @@ public class FXMLController implements Initializable {
     InetAddress ip;
     byte[] buf;
 
+    //Bouding coordinates for the robot
+    private double minX, minY, maxX, maxY;
+    //Robot's current coordinates
+    private double currentX, currentY;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         startButton.setStyle("-fx-background-color: green; -fx-text-fill: white");
         stopButton.setStyle("-fx-background-color: red; -fx-text-fill: white");
+        auto.getStyleClass().add("selected-mode");
         Line line1 = new Line(340, 631, 380, 531);
         Line line2 = new Line( 720, 631, 620, 531);
         line1.getStyleClass().add("line");
         line2.getStyleClass().add("line");
         streamDataView.getChildren().addAll(line1, line2);
         showBattery("High");
+
+        //Calculate bounding coordinates of the robot
+        minX = 0;
+        maxX = map.getBoundsInParent().getWidth() - car.getBoundsInParent().getWidth();
+        minY = 0;
+        maxY = map.getBoundsInParent().getHeight() - car.getBoundsInParent().getHeight();
+        //Set robot to starting position
+        currentX = minX;
+        currentY = maxY;
+        car.setTranslateX(currentX);
+        car.setTranslateY(currentY);
+        updatePosition(currentX, currentY);
 
         try {
             socket = new DatagramSocket(2711);
@@ -330,6 +363,62 @@ public class FXMLController implements Initializable {
                 break;
             default:
                 //Do nothing
+        }
+    }
+
+    //Create translate transition for the car
+    public void updatePosition(double newX, double newY) {
+        //Creating Translate Transition
+        TranslateTransition translateTransition = new TranslateTransition();
+        //Setting the duration of the transition
+        translateTransition.setDuration(Duration.millis(1000));
+        //Setting the node for the transition
+        translateTransition.setNode(car);
+        //Setting the value of the transition along the x axis.
+        translateTransition.setToX(newX);
+        translateTransition.setToY(newY);
+        //Playing the animation
+        translateTransition.play();
+        //Update position
+        translateTransition.setOnFinished(actionEvent -> {
+            //Draw the path the robot has gone through
+            drawPath(currentX , currentY , newX, newY);
+            //Update currentX and currentY
+            currentX = newX;
+            currentY = newY;
+            //Get the next coordinates
+            double nextX = minX + Math.random() * (maxX - minX);
+            double nextY = minY + Math.random() * (maxY - minY);
+            updatePosition(nextX, nextY);
+        });
+    }
+
+    //Draw the path the robot has gone through
+    public void drawPath(double oldX, double oldY, double newX, double newY) {
+        //Adjust the coordinates so the line is drawn from the center of the car
+        Line line = new Line(oldX + car.getBoundsInParent().getWidth()/2, oldY + car.getBoundsInParent().getHeight()/2, newX + car.getBoundsInParent().getWidth()/2, newY + car.getBoundsInParent().getHeight()/2);
+        line.setStrokeWidth(5);
+        line.setStroke(Color.BLUE);
+        mapContainer.getChildren().add(line);
+    }
+
+    @FXML
+    private void onAutoClicked() {
+        if (auto.isSelected()) {
+            auto.getStyleClass().add("selected-mode");
+            manual.getStyleClass().removeAll("selected-mode");
+        } else {
+            auto.getStyleClass().removeAll("selected-mode");
+        }
+    }
+
+    @FXML
+    private void onManualClicked() {
+        if (manual.isSelected()) {
+            manual.getStyleClass().add("selected-mode");
+            auto.getStyleClass().removeAll("selected-mode");
+        } else {
+            manual.getStyleClass().removeAll("selected-mode");
         }
     }
 }
