@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ControlStation.iml" filepath="$PROJECT_DIR$/.idea/modules/ControlStation.iml" group="ControlStation" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ControlStation_main.iml" filepath="$PROJECT_DIR$/.idea/modules/ControlStation_main.iml" group="ControlStation" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ControlStation_test.iml" filepath="$PROJECT_DIR$/.idea/modules/ControlStation_test.iml" group="ControlStation" />
+    </modules>
+  </component>
+</project>

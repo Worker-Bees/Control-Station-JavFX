@@ -82,6 +82,10 @@ public class FXMLController implements Initializable {
     private ToggleButton auto;
     @FXML
     private ToggleButton manual;
+    @FXML
+    private Line ruler;
+    @FXML
+    private Line forkliftNav;
 
     //For detecting key combinations
 //    final BooleanProperty aPressed = new SimpleBooleanProperty(false);
@@ -109,6 +113,9 @@ public class FXMLController implements Initializable {
     //Robot's current coordinates
     private double currentX, currentY;
 
+    //Forklift's bounding positions
+    private double forkMaxY, forkMinY, forkCurrentY;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         startButton.setStyle("-fx-background-color: green; -fx-text-fill: white");
@@ -120,6 +127,11 @@ public class FXMLController implements Initializable {
         line2.getStyleClass().add("line");
         streamDataView.getChildren().addAll(line1, line2);
         showBattery("High");
+
+        //Set bounding positions for forklift nav
+        forkMaxY = 0;
+        forkMinY = -ruler.getBoundsInParent().getHeight();
+        forkCurrentY = maxY;
 
         //Calculate bounding coordinates of the robot
         minX = 0;
@@ -223,10 +235,12 @@ public class FXMLController implements Initializable {
                 break;
             case "J":
                 liftButton.setStyle("-fx-background-color: black; -fx-text-fill: white");
+                raiseForkliftNav();
                 sendKey("J");
                 break;
             case "K":
                 dropButton.setStyle("-fx-background-color: black; -fx-text-fill: white");
+                lowerForkliftNav();
                 sendKey("K");
                 break;
             case "Equals":
@@ -419,6 +433,38 @@ public class FXMLController implements Initializable {
             auto.getStyleClass().removeAll("selected-mode");
         } else {
             manual.getStyleClass().removeAll("selected-mode");
+        }
+    }
+
+    public void raiseForkliftNav() {
+        if (forkCurrentY - forkMinY > 5) {
+            forkCurrentY = forkCurrentY - 5;
+            //Creating Translate Transition
+            TranslateTransition translateTransition = new TranslateTransition();
+            //Setting the duration of the transition
+            translateTransition.setDuration(Duration.millis(100));
+            //Setting the node for the transition
+            translateTransition.setNode(forkliftNav);
+            //Setting the value of the transition
+            translateTransition.setToY(forkCurrentY);
+            //Playing the animation
+            translateTransition.play();
+        }
+    }
+
+    public void lowerForkliftNav() {
+        if (forkMaxY - forkCurrentY > 5) {
+            forkCurrentY = forkCurrentY + 5;
+            //Creating Translate Transition
+            TranslateTransition translateTransition = new TranslateTransition();
+            //Setting the duration of the transition
+            translateTransition.setDuration(Duration.millis(100));
+            //Setting the node for the transition
+            translateTransition.setNode(forkliftNav);
+            //Setting the value of the transition
+            translateTransition.setToY(forkCurrentY);
+            //Playing the animation
+            translateTransition.play();
         }
     }
 }

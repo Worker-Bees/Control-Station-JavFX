@@ -25,7 +25,11 @@
                         <Rectangle2D />
                      </viewport>
                   </ImageView>
-                  <Pane fx:id="streamDataView" prefHeight="631.0" prefWidth="842.0" />
+                  <Pane fx:id="streamDataView" prefHeight="631.0" prefWidth="842.0">
+                     <children>
+                        <Line fx:id="ruler" endX="840.0" endY="550.0" startX="840.0" startY="80.0" stroke="#0602ee" strokeWidth="10.0" />
+                        <Line fx:id="forkliftNav" endX="840.0" endY="550.0" startX="770.0" startY="550.0" stroke="#0602ee" strokeWidth="5.0" />
+                     </children></Pane>
                </children>
             </StackPane>
             <GridPane prefHeight="100.0">
@@ -58,11 +62,11 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <ToggleButton fx:id="auto" onMouseClicked="#onAutoClicked" minWidth="100.0" mnemonicParsing="false" selected="true" text="Auto" GridPane.halignment="RIGHT">
+                  <ToggleButton fx:id="auto" minWidth="100.0" mnemonicParsing="false" onMouseClicked="#onAutoClicked" selected="true" text="Auto" GridPane.halignment="RIGHT">
                      <toggleGroup>
                         <ToggleGroup fx:id="mode" />
                      </toggleGroup></ToggleButton>
-                  <ToggleButton fx:id="manual" onMouseClicked="#onManualClicked" minWidth="100.0" mnemonicParsing="false" text="Manual" toggleGroup="$mode" GridPane.columnIndex="1" />
+                  <ToggleButton fx:id="manual" minWidth="100.0" mnemonicParsing="false" onMouseClicked="#onManualClicked" text="Manual" toggleGroup="$mode" GridPane.columnIndex="1" />
                </children>
             </GridPane>
          </children>
