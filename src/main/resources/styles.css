@@ -1,3 +1,14 @@
 .label {
     -fx-text-fill: blue;
 }
+
+.line {
+    -fx-stroke: red;
+}
+
+.selected-mode {
+    -fx-background-color: green;
+}
+
+
+
