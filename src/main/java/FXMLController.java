@@ -300,6 +300,23 @@ public class FXMLController implements Initializable {
             case "K":
                 dropButton.setStyle(null);
                 break;
+            // Toggle between auto and manual modes
+            case "T":
+                if (auto.isSelected()) {
+                    auto.setSelected(false);
+                    manual.setSelected(true);
+                    auto.getStyleClass().removeAll("selected-mode");
+                    manual.getStyleClass().add(("selected-mode"));
+                } else if (manual.isSelected()) {
+                    manual.setSelected(false);
+                    auto.setSelected(true);
+                    manual.getStyleClass().removeAll("selected-mode");
+                    auto.getStyleClass().add("selected-mode");
+                } else {
+                    auto.setSelected(true);
+                    auto.getStyleClass().add("selected-mode");
+                }
+                break;
             case "Enter":
                 startButton.setDisable(true);
                 sendKey("Enter");
