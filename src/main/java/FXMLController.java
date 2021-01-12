@@ -371,7 +371,7 @@ public class FXMLController implements Initializable {
         //Creating Translate Transition
         TranslateTransition translateTransition = new TranslateTransition();
         //Setting the duration of the transition
-        translateTransition.setDuration(Duration.millis(1000));
+        translateTransition.setDuration(Duration.millis(100));
         //Setting the node for the transition
         translateTransition.setNode(car);
         //Setting the value of the transition along the x axis.
