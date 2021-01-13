@@ -131,7 +131,7 @@ public class FXMLController implements Initializable {
         currentY = maxY;
         car.setTranslateX(currentX);
         car.setTranslateY(currentY);
-        updatePosition(currentX, currentY);
+//        updatePosition(currentX, currentY);
 
         try {
             socket = new DatagramSocket(2711);
@@ -187,19 +187,38 @@ public class FXMLController implements Initializable {
         Runnable getMetadata = () -> {
             String temp;
             try {
+                while(true) {
+                    try {
+                        socket_metadata.receive(receivedMetadataPacket);
+                        if (new String(receivedMetadataPacket.getData(), 0, receivedMetadataPacket.getLength()).contains("start")) break;
+                    } catch (IOException e) {
+//                    e.printStackTrace();
+                    }
+                }
+                DecimalFormat decimalFormat = new DecimalFormat("#00.00");
                 socket_metadata.receive(receivedMetadataPacket);
                 temp = new String(receivedMetadataPacket.getData()) + "";
                 double velocity = Double.parseDouble(temp);
                 if (velocity < 1) velocity = 0;
-                velocityText.setText(new DecimalFormat("#00.00").format(velocity) + " cm/s");
-            } catch (IOException e) {
+                velocityText.setText(decimalFormat.format(velocity) + " cm/s");
+
+                socket_metadata.receive(receivedMetadataPacket);
+                temp = new String(receivedMetadataPacket.getData()) + "";
+                double x = Double.parseDouble(temp);
+
+                socket_metadata.receive(receivedMetadataPacket);
+                temp = new String(receivedMetadataPacket.getData()) + "";
+                double y = Double.parseDouble(temp);
+                System.out.println(x +  " here " + y);
+                updatePosition(x, y);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         };
         ScheduledExecutorService timer = Executors.newSingleThreadScheduledExecutor();
         timer.scheduleAtFixedRate(frameExtracter, 0, 1, TimeUnit.MILLISECONDS);
         ScheduledExecutorService timer1 = Executors.newSingleThreadScheduledExecutor();
-        timer1.scheduleAtFixedRate(getMetadata, 0, 1, TimeUnit.MICROSECONDS);
+        timer1.scheduleAtFixedRate(getMetadata, 0, 1, TimeUnit.MILLISECONDS);
     }
 
     @FXML
@@ -223,11 +242,11 @@ public class FXMLController implements Initializable {
                 break;
             case "J":
                 liftButton.setStyle("-fx-background-color: black; -fx-text-fill: white");
-                sendKey("J");
+                sendKey("j");
                 break;
             case "K":
                 dropButton.setStyle("-fx-background-color: black; -fx-text-fill: white");
-                sendKey("K");
+                sendKey("k");
                 break;
             case "Equals":
                 speedUpButton.setStyle("-fx-background-color: black; -fx-text-fill: white");
@@ -371,7 +390,7 @@ public class FXMLController implements Initializable {
         //Creating Translate Transition
         TranslateTransition translateTransition = new TranslateTransition();
         //Setting the duration of the transition
-        translateTransition.setDuration(Duration.millis(100));
+        translateTransition.setDuration(Duration.millis(1));
         //Setting the node for the transition
         translateTransition.setNode(car);
         //Setting the value of the transition along the x axis.
@@ -387,9 +406,6 @@ public class FXMLController implements Initializable {
             currentX = newX;
             currentY = newY;
             //Get the next coordinates
-            double nextX = minX + Math.random() * (maxX - minX);
-            double nextY = minY + Math.random() * (maxY - minY);
-            updatePosition(nextX, nextY);
         });
     }
 
@@ -410,6 +426,7 @@ public class FXMLController implements Initializable {
         } else {
             auto.getStyleClass().removeAll("selected-mode");
         }
+        sendKey("auto");
     }
 
     @FXML
@@ -420,5 +437,6 @@ public class FXMLController implements Initializable {
         } else {
             manual.getStyleClass().removeAll("selected-mode");
         }
+        sendKey("manual");
     }
 }
