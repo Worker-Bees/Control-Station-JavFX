@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
@@ -108,7 +109,7 @@ public class FXMLController implements Initializable {
     InetAddress ip;
     byte[] buf;
 
-    //Bouding coordinates for the robot
+    //Bounding coordinates for the robot
     private double minX, minY, maxX, maxY;
     //Robot's current coordinates
     private double currentX, currentY;
@@ -402,7 +403,7 @@ public class FXMLController implements Initializable {
         //Creating Translate Transition
         TranslateTransition translateTransition = new TranslateTransition();
         //Setting the duration of the transition
-        translateTransition.setDuration(Duration.millis(100));
+        translateTransition.setDuration(Duration.millis(1000));
         //Setting the node for the transition
         translateTransition.setNode(car);
         //Setting the value of the transition along the x axis.
@@ -483,5 +484,17 @@ public class FXMLController implements Initializable {
             //Playing the animation
             translateTransition.play();
         }
+    }
+
+    public void rotateRobot(double angle, double time) {
+        Rectangle rect = new Rectangle(100, 40, 100, 100);
+        rect.setArcHeight(50);
+        rect.setArcWidth(50);
+        rect.setFill(Color.VIOLET);
+
+        RotateTransition rt = new RotateTransition(Duration.millis(time), rect);
+        rt.setNode(car);
+        rt.setByAngle(angle);
+        rt.play();
     }
 }
