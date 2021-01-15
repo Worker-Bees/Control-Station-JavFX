@@ -1,29 +1,16 @@
 import java.io.*;
 import java.net.*;
-import java.text.DecimalFormat;
-import java.util.Arrays;
 import java.util.Base64;
-import java.util.Collection;
 import java.util.ResourceBundle;
-import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javafx.animation.TranslateTransition;
-import javafx.beans.binding.BooleanBinding;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
@@ -107,8 +94,8 @@ public class FXMLController implements Initializable {
     //Bouding coordinates for the robot
     private double minX, minY, maxX, maxY;
     //Robot's current coordinates
-    private double currentX, currentY;
-
+    private double currentX, currentY, newX, newY, velocity, angle;
+    private final double offestY = 400;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         startButton.setStyle("-fx-background-color: green; -fx-text-fill: white");
@@ -127,8 +114,8 @@ public class FXMLController implements Initializable {
         minY = 0;
         maxY = map.getBoundsInParent().getHeight() - car.getBoundsInParent().getHeight();
         //Set robot to starting position
-        currentX = minX;
-        currentY = maxY;
+        currentX = 0;
+        currentY = 400;
         car.setTranslateX(currentX);
         car.setTranslateY(currentY);
 //        updatePosition(currentX, currentY);
@@ -190,35 +177,76 @@ public class FXMLController implements Initializable {
                 while(true) {
                     try {
                         socket_metadata.receive(receivedMetadataPacket);
-                        if (new String(receivedMetadataPacket.getData(), 0, receivedMetadataPacket.getLength()).contains("start")) break;
+                        temp = new String(receivedMetadataPacket.getData()) + "";
+                        String signal = temp.substring(0, 2);
+                        if (signal.equals("v=")) {
+                            String val = temp.substring(2, 6);
+                            velocity = Double.parseDouble(val);
+                            break;
+                        }
                     } catch (IOException e) {
 //                    e.printStackTrace();
                     }
                 }
-                DecimalFormat decimalFormat = new DecimalFormat("#00.00");
-                socket_metadata.receive(receivedMetadataPacket);
-                temp = new String(receivedMetadataPacket.getData()) + "";
-                double velocity = Double.parseDouble(temp);
-                if (velocity < 1) velocity = 0;
-                velocityText.setText(decimalFormat.format(velocity) + " cm/s");
-
-                socket_metadata.receive(receivedMetadataPacket);
-                temp = new String(receivedMetadataPacket.getData()) + "";
-                double x = Double.parseDouble(temp);
-
-                socket_metadata.receive(receivedMetadataPacket);
-                temp = new String(receivedMetadataPacket.getData()) + "";
-                double y = Double.parseDouble(temp);
-                System.out.println(x +  " here " + y);
-                updatePosition(x, y);
+                while(true) {
+                    try {
+                        socket_metadata.receive(receivedMetadataPacket);
+                        temp = new String(receivedMetadataPacket.getData()) + "";
+                        String signal = temp.substring(0, 2);
+                        if (signal.equals("a=")) {
+                            String val = temp.substring(2, 6);
+                            angle = Double.parseDouble(val);
+                            break;
+                        }
+                    } catch (IOException e) {
+//                    e.printStackTrace();
+                    }
+                }
+                while(true) {
+                    try {
+                        socket_metadata.receive(receivedMetadataPacket);
+                        temp = new String(receivedMetadataPacket.getData()) + "";
+                        String signal = temp.substring(0, 2);
+                        if (signal.equals("x=")) {
+                            String val = temp.substring(2, 6);
+                            newX = Double.parseDouble(val);
+                            break;
+                        }
+                    } catch (IOException e) {
+//                    e.printStackTrace();
+                    }
+                }
+                while(true) {
+                    try {
+                        socket_metadata.receive(receivedMetadataPacket);
+                        temp = new String(receivedMetadataPacket.getData()) + "";
+                        String signal = temp.substring(0, 2);
+                        if (signal.equals("y=")) {
+                            String val = temp.substring(2, 6);
+                            newY = offestY - Double.parseDouble(val);
+                            break;
+                        }
+                    } catch (IOException e) {
+//                    e.printStackTrace();
+                    }
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         };
-        ScheduledExecutorService timer = Executors.newSingleThreadScheduledExecutor();
-        timer.scheduleAtFixedRate(frameExtracter, 0, 1, TimeUnit.MILLISECONDS);
+
+        Runnable updateMap = () -> {
+//            System.out.println("x = " + newX + " y = " + newY + "velocity = " + velocity);
+            velocityText.setText(velocity + " cm/s");
+            updatePosition(newX, newY);
+        };
+
         ScheduledExecutorService timer1 = Executors.newSingleThreadScheduledExecutor();
-        timer1.scheduleAtFixedRate(getMetadata, 0, 1, TimeUnit.MILLISECONDS);
+        timer1.scheduleAtFixedRate(frameExtracter, 0, 1, TimeUnit.MILLISECONDS);
+        ScheduledExecutorService timer2 = Executors.newSingleThreadScheduledExecutor();
+        timer2.scheduleAtFixedRate(getMetadata, 0, 1, TimeUnit.MILLISECONDS);
+        ScheduledExecutorService timer3 = Executors.newSingleThreadScheduledExecutor();
+        timer3.scheduleAtFixedRate(updateMap, 0, 100, TimeUnit.MILLISECONDS);
     }
 
     @FXML
@@ -387,26 +415,28 @@ public class FXMLController implements Initializable {
 
     //Create translate transition for the car
     public void updatePosition(double newX, double newY) {
-        //Creating Translate Transition
-        TranslateTransition translateTransition = new TranslateTransition();
-        //Setting the duration of the transition
-        translateTransition.setDuration(Duration.millis(1));
-        //Setting the node for the transition
-        translateTransition.setNode(car);
-        //Setting the value of the transition along the x axis.
-        translateTransition.setToX(newX);
-        translateTransition.setToY(newY);
-        //Playing the animation
-        translateTransition.play();
-        //Update position
-        translateTransition.setOnFinished(actionEvent -> {
-            //Draw the path the robot has gone through
-            drawPath(currentX , currentY , newX, newY);
-            //Update currentX and currentY
-            currentX = newX;
-            currentY = newY;
-            //Get the next coordinates
-        });
+        if (newX <= maxX && newY <= maxY && newX >= minX && newY >=minY) {
+            //Creating Translate Transition
+            TranslateTransition translateTransition = new TranslateTransition();
+            //Setting the duration of the transition
+            translateTransition.setDuration(Duration.millis(100));
+            //Setting the node for the transition
+            translateTransition.setNode(car);
+            //Setting the value of the transition along the x axis.
+            translateTransition.setToX(newX);
+            translateTransition.setToY(newY);
+            //Playing the animation
+            translateTransition.play();
+            //Update position
+            translateTransition.setOnFinished(actionEvent -> {
+                //Draw the path the robot has gone through
+                drawPath(currentX , currentY , newX, newY);
+                //Update currentX and currentY
+                currentX = newX;
+                currentY = newY;
+                //Get the next coordinates
+            });
+        }
     }
 
     //Draw the path the robot has gone through
