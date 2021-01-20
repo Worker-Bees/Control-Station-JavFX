@@ -94,8 +94,13 @@ public class FXMLController implements Initializable {
     //Bouding coordinates for the robot
     private double minX, minY, maxX, maxY;
     //Robot's current coordinates
-    private double currentX, currentY, newX, newY, velocity, angle;
-    private final double offestY = 400;
+    private double currentX = 0, currentY = 460, newX = 0, newY = 0, velocity = 0, angle = 0;
+    private final double offsetY = 460;
+    private final double scale = 2;
+    private ScheduledExecutorService livestreamTask;
+    private ScheduledExecutorService getDataTask;
+    private ScheduledExecutorService updateUITask;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         startButton.setStyle("-fx-background-color: green; -fx-text-fill: white");
@@ -112,14 +117,10 @@ public class FXMLController implements Initializable {
         minX = 0;
         maxX = map.getBoundsInParent().getWidth() - car.getBoundsInParent().getWidth();
         minY = 0;
-        maxY = map.getBoundsInParent().getHeight() - car.getBoundsInParent().getHeight();
+        maxY = map.getBoundsInParent().getHeight() - car.getBoundsInParent().getHeight() + 60;
         //Set robot to starting position
-        currentX = 0;
-        currentY = 400;
-        car.setTranslateX(currentX);
-        car.setTranslateY(currentY);
 //        updatePosition(currentX, currentY);
-
+        car.setTranslateY(460);
         try {
             socket = new DatagramSocket(2711);
             socket_metadata = new DatagramSocket(3333);
@@ -135,7 +136,8 @@ public class FXMLController implements Initializable {
         try {
             socket2 = new DatagramSocket(1234);
 //            ip = InetAddress.getByName("localhost");
-            ip = InetAddress.getByName("192.168.137.254");
+//            ip = InetAddress.getByName("192.168.137.104");
+            ip = InetAddress.getByName("10.247.169.49");
             buf = null;
         } catch (IOException e) {
             e.printStackTrace();
@@ -209,7 +211,8 @@ public class FXMLController implements Initializable {
                         String signal = temp.substring(0, 2);
                         if (signal.equals("x=")) {
                             String val = temp.substring(2, 6);
-                            newX = Double.parseDouble(val);
+                            newX = Double.parseDouble(val)  * scale;
+                            System.out.println(newX);
                             break;
                         }
                     } catch (IOException e) {
@@ -223,7 +226,8 @@ public class FXMLController implements Initializable {
                         String signal = temp.substring(0, 2);
                         if (signal.equals("y=")) {
                             String val = temp.substring(2, 6);
-                            newY = offestY - Double.parseDouble(val);
+                            newY = offsetY - (Double.parseDouble(val) * scale);
+                            System.out.println(newY);;
                             break;
                         }
                     } catch (IOException e) {
@@ -238,15 +242,21 @@ public class FXMLController implements Initializable {
         Runnable updateMap = () -> {
 //            System.out.println("x = " + newX + " y = " + newY + "velocity = " + velocity);
             velocityText.setText(velocity + " cm/s");
+            car.setRotate(-angle);
             updatePosition(newX, newY);
         };
+        livestreamTask = Executors.newSingleThreadScheduledExecutor();
+        livestreamTask.scheduleAtFixedRate(frameExtracter, 0, 33, TimeUnit.MILLISECONDS);
+        getDataTask = Executors.newSingleThreadScheduledExecutor();
+        getDataTask.scheduleAtFixedRate(getMetadata, 0, 10, TimeUnit.MILLISECONDS);
+        updateUITask = Executors.newSingleThreadScheduledExecutor();
+        updateUITask.scheduleAtFixedRate(updateMap, 0, 100, TimeUnit.MILLISECONDS);
+    }
 
-        ScheduledExecutorService timer1 = Executors.newSingleThreadScheduledExecutor();
-        timer1.scheduleAtFixedRate(frameExtracter, 0, 1, TimeUnit.MILLISECONDS);
-        ScheduledExecutorService timer2 = Executors.newSingleThreadScheduledExecutor();
-        timer2.scheduleAtFixedRate(getMetadata, 0, 1, TimeUnit.MILLISECONDS);
-        ScheduledExecutorService timer3 = Executors.newSingleThreadScheduledExecutor();
-        timer3.scheduleAtFixedRate(updateMap, 0, 100, TimeUnit.MILLISECONDS);
+    public void stopAllTasks() {
+        livestreamTask.shutdownNow();
+        updateUITask.shutdownNow();
+        getDataTask.shutdownNow();
     }
 
     @FXML
