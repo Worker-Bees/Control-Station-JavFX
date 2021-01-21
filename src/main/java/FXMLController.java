@@ -142,7 +142,7 @@ public class FXMLController implements Initializable {
             socket2 = new DatagramSocket(1234);
 //            ip = InetAddress.getByName("localhost");
 //            ip = InetAddress.getByName("192.168.137.104");
-            ip = InetAddress.getByName("10.0.0.101");
+            ip = InetAddress.getByName("10.0.0.103");
             buf = null;
         } catch (IOException e) {
             e.printStackTrace();
@@ -150,7 +150,7 @@ public class FXMLController implements Initializable {
     }
 
     public void startStream(){
-        sendKey("start");
+//        sendKey("start");
         Runnable frameExtracter = () -> {
             String temp = "";
             ByteArrayOutputStream imageByteStream = new ByteArrayOutputStream();
@@ -181,84 +181,81 @@ public class FXMLController implements Initializable {
 
         Runnable getMetadata = () -> {
             String temp;
-            try {
-                for (int i = 0; i < 10; i ++) {
-                    try {
-                        socket_metadata.receive(receivedMetadataPacket);
-                        temp = new String(receivedMetadataPacket.getData()) + "";
-                        String signal = temp.substring(0, 2);
-                        if (signal.equals("v=")) {
-                            String val = temp.substring(2, 6);
-                            velocity = Double.parseDouble(val);
-                            break;
-                        }
-                    } catch (IOException e) {
+            while (true) {
+                try {
+                    while (true) {
+                        try {
+                            socket_metadata.receive(receivedMetadataPacket);
+                            temp = new String(receivedMetadataPacket.getData()) + "";
+                            String signal = temp.substring(0, 2);
+                            if (signal.equals("v=")) {
+                                String val = temp.substring(2, 6);
+                                velocity = Double.parseDouble(val);
+                                break;
+                            }
+                        } catch (IOException e) {
 //                    e.printStackTrace();
-                    }
-                }
-                for (int i = 0; i < 10; i++) {
-                    try {
-                        socket_metadata.receive(receivedMetadataPacket);
-                        temp = new String(receivedMetadataPacket.getData()) + "";
-                        String signal = temp.substring(0, 2);
-                        if (signal.equals("a=")) {
-                            String val = temp.substring(2, 6);
-                            angle = Double.parseDouble(val);
-                            break;
                         }
-                    } catch (IOException e) {
-//                    e.printStackTrace();
                     }
-                }
-                for (int i = 0; i < 10; i++) {
-                    try {
-                        socket_metadata.receive(receivedMetadataPacket);
-                        temp = new String(receivedMetadataPacket.getData()) + "";
-                        String signal = temp.substring(0, 2);
-                        if (signal.equals("x=")) {
-                            String val = temp.substring(2, 6);
-                            newX = Double.parseDouble(val)  * scale;
-                            System.out.println(newX);
-                            break;
+                    while (true) {
+                        try {
+                            socket_metadata.receive(receivedMetadataPacket);
+                            temp = new String(receivedMetadataPacket.getData()) + "";
+                            String signal = temp.substring(0, 2);
+                            if (signal.equals("a=")) {
+                                String val = temp.substring(2, 6);
+                                angle = Double.parseDouble(val);
+                                break;
+                            }
+                        } catch (IOException e) {
+//                    e.printStackTrace();
                         }
-                    } catch (IOException e) {
-//                    e.printStackTrace();
                     }
-                }
-                for (int i = 0; i < 10; i++) {
-                    try {
-                        socket_metadata.receive(receivedMetadataPacket);
-                        temp = new String(receivedMetadataPacket.getData()) + "";
-                        String signal = temp.substring(0, 2);
-                        if (signal.equals("y=")) {
-                            String val = temp.substring(2, 6);
-                            newY = offsetY - (Double.parseDouble(val) * scale);
-                            System.out.println(newY);
-                            break;
+                    while (true) {
+                        try {
+                            socket_metadata.receive(receivedMetadataPacket);
+                            temp = new String(receivedMetadataPacket.getData()) + "";
+                            String signal = temp.substring(0, 2);
+                            if (signal.equals("x=")) {
+                                String val = temp.substring(2, 6);
+                                newX = Double.parseDouble(val) * scale;
+                                break;
+                            }
+                        } catch (IOException e) {
+//                    e.printStackTrace();
                         }
-                    } catch (IOException e) {
-//                    e.printStackTrace();
                     }
+                    while (true) {
+                        try {
+                            socket_metadata.receive(receivedMetadataPacket);
+                            temp = new String(receivedMetadataPacket.getData()) + "";
+                            String signal = temp.substring(0, 2);
+                            if (signal.equals("y=")) {
+                                String val = temp.substring(2, 6);
+                                newY = offsetY - (Double.parseDouble(val) * scale);
+                                break;
+                            }
+                        } catch (IOException e) {
+//                    e.printStackTrace();
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                result = true;
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         };
 
         Runnable updateMap = () -> {
-            if (result) {
-                System.out.println("x = " + newX + " y = " + newY + "velocity = " + velocity);
-                velocityText.setText(velocity + " cm/s");
-                car.setRotate(-angle);
-                updatePosition(newX, newY);
-            }
-//
+            velocityText.setText(velocity + " cm/s");
+            car.setRotate(-angle);
+            updatePosition(newX, newY);
         };
+
+        getMetadata.run();
         livestreamTask = Executors.newSingleThreadScheduledExecutor();
         livestreamTask.scheduleAtFixedRate(frameExtracter, 0, 33, TimeUnit.MILLISECONDS);
-        getDataTask = Executors.newSingleThreadScheduledExecutor();
-        getDataTask.scheduleAtFixedRate(getMetadata, 0, 33, TimeUnit.MILLISECONDS);
+//        getDataTask = Executors.newSingleThreadScheduledExecutor();
+//        getDataTask.scheduleAtFixedRate(getMetadata, 0, 1, TimeUnit.MILLISECONDS);
         updateUITask = Executors.newSingleThreadScheduledExecutor();
         updateUITask.scheduleAtFixedRate(updateMap, 0, 100, TimeUnit.MILLISECONDS);
     }
